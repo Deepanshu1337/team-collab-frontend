@@ -36,7 +36,6 @@ const ManagerTasks = () => {
   const userId = useSelector((s: RootState) => s.auth.user?.id);
   const role = useSelector((s: RootState) => s.auth.role);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [counts, setCounts] = useState<TaskCounts | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -48,7 +47,6 @@ const ManagerTasks = () => {
         if (role === 'MANAGER') {
           const response = await axios.get<TeamTasksResponse>(`/api/tasks/${teamId}/tasks`);
           setTasks(response.data.tasks);
-          setCounts(response.data.counts);
         } else {
           // For other roles, only get tasks assigned to the user
           const projectsRes = await axios.get(`/api/projects/${teamId}`);
@@ -61,15 +59,7 @@ const ManagerTasks = () => {
           }
           setTasks(allTasks);
           // Calculate counts for member tasks
-          const todoCount = allTasks.filter(task => task.status === 'todo').length;
-          const inProgressCount = allTasks.filter(task => task.status === 'in-progress').length;
-          const doneCount = allTasks.filter(task => task.status === 'done').length;
-          setCounts({
-            todo: todoCount,
-            'in-progress': inProgressCount,
-            done: doneCount,
-            total: allTasks.length
-          });
+        
         }
       } catch (error) {
         console.error('Failed to fetch tasks', error);

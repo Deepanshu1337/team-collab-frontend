@@ -14,12 +14,9 @@ interface Task {
   assignedTo?: string;
 }
 
-interface Project {
-  _id: string;
-}
+
 
 const MemberTasks = () => {
-  const teamId = useSelector((s: RootState) => s.auth.teamId);
   const userId = useSelector((s: RootState) => s.auth.user?.id);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(false);

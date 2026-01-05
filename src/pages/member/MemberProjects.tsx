@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Button } from '../../components/ui/button';
 import { FolderOpen, Calendar, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../lib/axios';
@@ -11,8 +10,6 @@ import toast from 'react-hot-toast';
 const MemberProjects = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const user = useSelector((state: RootState) => state.auth.user);
-  const role = useSelector((state: RootState) => state.auth.role);
   const navigate = useNavigate();
 
   useEffect(() => {

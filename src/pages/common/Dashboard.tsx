@@ -3,18 +3,15 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../../store';
 import { UserCard } from '../../components/dashboard/UserCard';
-import { AdminStatsCard } from '../../components/dashboard/AdminStatsCard';
-import { ManagerStatsCard } from '../../components/dashboard/ManagerStatsCard';
 import { MemberStatsCard } from '../../components/dashboard/MemberStatsCard';
 import { ManagerTeamCards } from '../../components/dashboard/ManagerTeamCards';
-import { MemberTasks as MemberTasksList } from '../../components/dashboard/MemberTasks';
 import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
 import { Label } from '../../components/ui/label';
 import { Input } from '../../components/ui/input';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
-import { Plus, FolderOpen, CheckCircle2, AlertCircle, Clock, Users } from 'lucide-react';
+import { Tabs, TabsContent } from '../../components/ui/tabs';
+import { Plus} from 'lucide-react';
 import axios from '../../lib/axios';
 
 const Dashboard = () => {

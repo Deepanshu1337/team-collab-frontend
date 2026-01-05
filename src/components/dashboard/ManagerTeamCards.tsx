@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Users, FolderOpen, CheckCircle, Circle } from "lucide-react";
+import { Users, FolderOpen } from "lucide-react";
 
 interface TeamMember {
   _id: string;
