@@ -111,7 +111,7 @@ const Dashboard = () => {
     setTeamError(null);
 
     try {
-      const response = await axios.post('/api/teams', {
+       await axios.post('/api/teams', {
         name: teamName.trim(),
         description: teamDescription.trim()
       });
