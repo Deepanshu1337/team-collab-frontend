@@ -80,6 +80,11 @@ const TeamOverview = () => {
   const [teamError, setTeamError] = useState<string | null>(null);
   const [projects, setProjects] = useState<Array<{ _id: string; name: string; description?: string; createdAt?: string }>>([]);
 
+  // Remove member dialog state
+  const [removeMemberOpen, setRemoveMemberOpen] = useState(false);
+  const [memberToRemove, setMemberToRemove] = useState<Member | null>(null);
+  const [removingMember, setRemovingMember] = useState(false);
+
 
   useEffect(() => {
     if (teamId) {
@@ -801,16 +806,9 @@ const TeamOverview = () => {
                             <Button 
                               size="sm" 
                               variant="destructive"
-                              onClick={async () => {
-                                if (window.confirm(`Are you sure you want to remove ${m.name} from the team?`)) {
-                                  try {
-                                    await axios.delete(`/api/teams/${teamId}/members/${m._id}`);
-                                    await fetchMembers();
-                                  } catch (e: any) {
-                                    console.error('Failed to remove member', e);
-                                    toast.error('Failed to remove member: ' + (e.response?.data?.message || 'Unknown error'));
-                                  }
-                                }
+                              onClick={() => {
+                                setMemberToRemove(m);
+                                setRemoveMemberOpen(true);
                               }}
                             >
                               Remove
@@ -953,6 +951,53 @@ const TeamOverview = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Remove Member Confirmation Dialog */}
+      <Dialog open={removeMemberOpen} onOpenChange={setRemoveMemberOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Remove Member</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove <span className="font-semibold text-neutral-50">{memberToRemove?.name}</span> from the team? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setRemoveMemberOpen(false);
+                setMemberToRemove(null);
+              }}
+              disabled={removingMember}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                if (!memberToRemove) return;
+                setRemovingMember(true);
+                try {
+                  await axios.delete(`/api/teams/${teamId}/members/${memberToRemove._id}`);
+                  toast.success(`${memberToRemove.name} has been removed from the team.`);
+                  await fetchMembers();
+                  setRemoveMemberOpen(false);
+                  setMemberToRemove(null);
+                } catch (e: any) {
+                  console.error('Failed to remove member', e);
+                  toast.error('Failed to remove member: ' + (e.response?.data?.message || 'Unknown error'));
+                } finally {
+                  setRemovingMember(false);
+                }
+              }}
+              disabled={removingMember}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {removingMember ? 'Removing...' : 'Remove Member'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
